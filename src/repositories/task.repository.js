@@ -4,7 +4,7 @@ let tasks = [
   { id: 3, title: "Add Swagger documentation", done: false }
 ];
 
-let nextId = 4; // Tracks the next available ID
+let nextId = 4;
 
 class TaskRepository {
   findAll(filters = {}) {
@@ -27,7 +27,6 @@ class TaskRepository {
     return tasks.find(t => t.id === id) || null;
   }
 
-  // ADD THIS METHOD:
   create(title) {
     const newTask = {
       id: nextId++,
@@ -36,6 +35,29 @@ class TaskRepository {
     };
     tasks.push(newTask);
     return newTask;
+  }
+
+  // ADD THESE TWO METHODS:
+  update(id, updates) {
+    const task = this.findById(id);
+    if (!task) return null;
+
+    if (updates.title !== undefined) {
+      task.title = updates.title.trim();
+    }
+    if (updates.done !== undefined) {
+      task.done = updates.done;
+    }
+
+    return task;
+  }
+
+  delete(id) {
+    const index = tasks.findIndex(t => t.id === id);
+    if (index === -1) return false;
+
+    tasks.splice(index, 1);
+    return true;
   }
 }
 

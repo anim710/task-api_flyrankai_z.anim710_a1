@@ -22,13 +22,33 @@ router.get('/:id', (req, res, next) => {
   }
 });
 
-// ADD THIS ROUTE (POST /tasks):
+// POST /tasks
 router.post('/', (req, res, next) => {
   try {
     const newTask = taskService.createTask(req.body.title);
-    res.status(201).json(newTask); // Returns 201 Created
+    res.status(201).json(newTask);
   } catch (err) {
-    next(err); // Hands any ValidationError over to errorHandler middleware
+    next(err);
+  }
+});
+
+// ADD THIS ROUTE (PUT /tasks/:id):
+router.put('/:id', (req, res, next) => {
+  try {
+    const updatedTask = taskService.updateTask(req.params.id, req.body);
+    res.json(updatedTask);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// ADD THIS ROUTE (DELETE /tasks/:id):
+router.delete('/:id', (req, res, next) => {
+  try {
+    taskService.deleteTask(req.params.id);
+    res.status(204).send(); // 204 No Content
+  } catch (err) {
+    next(err);
   }
 });
 
