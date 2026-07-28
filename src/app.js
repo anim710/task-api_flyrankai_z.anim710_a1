@@ -1,11 +1,12 @@
 const express = require('express');
+const taskRoutes = require('./routes/task.routes');
+const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
 
-// Middleware to parse incoming JSON bodies
 app.use(express.json());
 
-// GET / - Root endpoint returning JSON describing the API
+// Root endpoint
 app.get('/', (req, res) => {
   res.json({
     name: "Task API",
@@ -14,9 +15,15 @@ app.get('/', (req, res) => {
   });
 });
 
-// GET /health - Health check endpoint
+// Health check endpoint
 app.get('/health', (req, res) => {
   res.json({ status: "ok" });
 });
+
+// Mount task routes
+app.use('/tasks', taskRoutes);
+
+// Mount central error handler (MUST be added after routes)
+app.use(errorHandler);
 
 module.exports = app;
